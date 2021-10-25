@@ -15,6 +15,11 @@ variable "folder_id" {
   default = ""
 }
 
+variable "image_id" {
+  default = "fd80viupr3qjr5g6g9du"
+
+}
+
 variable "user" {
   default = "ubuntu"
 
