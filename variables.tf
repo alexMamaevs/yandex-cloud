@@ -27,3 +27,7 @@ variable "sshrsa" {
 variable "credentials" {
   default = ""
 }
+
+variable "node_count" {
+  default = "2"
+}
