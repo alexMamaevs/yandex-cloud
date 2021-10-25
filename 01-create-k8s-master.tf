@@ -24,3 +24,19 @@ resource "yandex_compute_instance" "k8s-master" {
     ssh-keys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
 }
+
+output "name_master" {
+  value = yandex_compute_instance.k8s-master.name
+}
+
+output "fqdn_master" {
+  value = yandex_compute_instance.k8s-master.fqdn
+}
+
+output "internal_ip_address_master" {
+  value = yandex_compute_instance.k8s-master.network_interface.0.ip_address
+}
+
+output "external_ip_address_master" {
+  value = yandex_compute_instance.k8s-master.network_interface.0.nat_ip_address
+}
