@@ -1,0 +1,60 @@
+- hosts: k8s-master
+  become: yes
+  tasks:
+    - name: Configure node ip
+      lineinfile:
+        path: /etc/default/kubelet
+        line: KUBELET_EXTRA_ARGS=--node-ip="192.168.10.17"
+        create: yes
+
+    - name: Restart kubelet
+      service:
+        name: kubelet
+        daemon_reload: yes
+        state: restarted
+   
+    - name: initialize the cluster
+      shell: kubeadm init --pod-network-cidr="172.16.0.0/12" --node-name k8s-master --ignore-preflight-errors Swap >> cluster_initialized.txt
+      args:
+        chdir: $HOME
+        creates: cluster_initialized.txt
+
+    - name: create .kube directory
+      become: yes
+      become_user: ubuntu
+      file:
+        path: $HOME/.kube
+        state: directory
+        mode: 0755
+
+    - name: copies admin.conf to user's ubuntu config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        remote_src: yes
+        owner: ubuntu
+
+    - name: install Pod network
+      become: yes
+      become_user: ubuntu
+      shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml >> pod_network_setup.txt
+      args:
+        chdir: $HOME
+        creates: pod_network_setup.txt
+        
+    - name: Install Metrics Server
+      become: yes
+      become_user: ubuntu
+      shell: kubectl apply -f https://raw.githubusercontent.com/scriptcamp/kubeadm-scripts/main/manifests/metrics-server.yaml >> pod_metrics_setup.txt
+      args:
+        chdir: $HOME
+        creates: pod_metrics_setup.txt
+        
+    - name: Install Kubernetes Dashboard
+      become: yes
+      become_user: ubuntu
+      shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml >> pod_dashboard_setup.txt
+      args:
+        chdir: $HOME
+        creates: pod_dashboard_setup.txt
+
