@@ -1,0 +1,9 @@
+[k8s-master]
+k8s-master ansible_ssh_host=62.84.113.198 ansible_user=ubuntu
+
+[k8s-worker]
+k8s-worker-1 ansible_ssh_host=178.154.200.77 ansible_user=ubuntu
+k8s-worker-2 ansible_ssh_host=84.201.175.148 ansible_user=ubuntu
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3

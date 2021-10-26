@@ -70,9 +70,3 @@
     - name: docker status
       service: name=docker state=started      
 
-# copy config to local folders
-    - name: copies admin.conf to user's config
-      copy:
-        remote_src: yes
-        src: /etc/kubernetes/admin.conf
-        dest: {{ playbook_dir }}/config

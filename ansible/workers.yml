@@ -10,22 +10,9 @@
       set_fact:
         join_command: "{{ join_command_raw.stdout_lines[0] }}"
 
-
 - hosts: k8s-worker
   become: yes
   tasks:
-    - name: Configure node ip
-      lineinfile:
-        path: /etc/default/kubelet
-        line: KUBELET_EXTRA_ARGS=--node-ip="192.168.10.16"
-        create: yes
-
-    - name: Restart kubelet
-      service:
-        name: kubelet
-        daemon_reload: yes
-        state: restarted
-   
     - name: join cluster
       shell: "{{ hostvars['k8s-master'].join_command }} >> node_joined.txt"
       args:

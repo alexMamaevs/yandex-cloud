@@ -1,18 +1,6 @@
 - hosts: k8s-master
   become: yes
   tasks:
-    - name: Configure node ip
-      lineinfile:
-        path: /etc/default/kubelet
-        line: KUBELET_EXTRA_ARGS=--node-ip="192.168.10.17"
-        create: yes
-
-    - name: Restart kubelet
-      service:
-        name: kubelet
-        daemon_reload: yes
-        state: restarted
-   
     - name: initialize the cluster
       shell: kubeadm init --pod-network-cidr="172.16.0.0/12" --node-name k8s-master --ignore-preflight-errors Swap >> cluster_initialized.txt
       args:
@@ -34,6 +22,9 @@
         remote_src: yes
         owner: ubuntu
 
+
+# insall Calico
+
     - name: install Pod network
       become: yes
       become_user: ubuntu
@@ -41,7 +32,9 @@
       args:
         chdir: $HOME
         creates: pod_network_setup.txt
-        
+
+# install metrics server
+
     - name: Install Metrics Server
       become: yes
       become_user: ubuntu
@@ -49,7 +42,9 @@
       args:
         chdir: $HOME
         creates: pod_metrics_setup.txt
-        
+
+# install dashboard
+
     - name: Install Kubernetes Dashboard
       become: yes
       become_user: ubuntu
