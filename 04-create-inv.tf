@@ -1,13 +1,14 @@
+data "template_file" "k8s" {
+  template = file("${path.module}/templates/inventory.tpl")
+  vars = {
+    k8s_master = join("\n", formatlist("%s ansible_ssh_host=%s", yandex_compute_instance.k8s-master.*.name, yandex_compute_instance.k8s-master.*.network_interface.0.nat_ip_address))
+    k8s_worker = join("\n", formatlist("%s ansible_ssh_host=%s", yandex_compute_instance.k8s-worker.*.name, yandex_compute_instance.k8s-worker.*.network_interface.0.nat_ip_address))
 
+  }
 
-output "fqdn_worker_1" {
-  value = yandex_compute_instance.k8s-worker[1].network_interface.0.ip_address
 }
 
-output "internal_ip_address_worker_1" {
-  value = yandex_compute_instance.k8s-worker[1].network_interface.0.ip_address
-}
-
-output "external_ip_address_worker_1" {
-  value = yandex_compute_instance.k8s-worker[1].network_interface.0.nat_ip_address
+resource "local_file" "k8s_file" {
+  content  = data.template_file.k8s.rendered
+  filename = "${path.module}/ansible/inventory"
 }
