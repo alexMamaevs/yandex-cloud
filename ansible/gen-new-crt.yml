@@ -4,7 +4,7 @@
   tasks:
     - name: initialize the new serts cluster
       become: yes
-      shell: kubeadm init phase certs apiserver --apiserver-cert-extra-sans=k8s-master,localhost,127.0.0.1,178.154.222.145 >> cluster_crt.txt
+      shell: kubeadm init phase certs apiserver --apiserver-cert-extra-sans=k8s-master,localhost,127.0.0.1 >> cluster_crt.txt
       args:
         chdir: $HOME
         creates: cluster_crt.txt
