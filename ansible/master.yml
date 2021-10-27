@@ -2,7 +2,7 @@
   become: yes
   tasks:
     - name: initialize the cluster
-      shell: kubeadm init --pod-network-cidr="172.16.0.0/12" --node-name k8s-master --ignore-preflight-errors Swap >> cluster_initialized.txt
+      shell: kubeadm init --pod-network-cidr="172.16.0.0/12" --apiserver-cert-extra-sans=k8s-master --node-name k8s-master --ignore-preflight-errors Swap >> cluster_initialized.txt
       args:
         chdir: $HOME
         creates: cluster_initialized.txt

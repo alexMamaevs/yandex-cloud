@@ -1,0 +1,29 @@
+- hosts: k8s-master
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: initialize the new serts cluster
+      become: yes
+      shell: kubeadm init phase certs apiserver --apiserver-cert-extra-sans=k8s-master,localhost,127.0.0.1,178.154.222.145 >> cluster_crt.txt
+      args:
+        chdir: $HOME
+        creates: cluster_crt.txt
+
+    - name: copies admin.conf to user's ubuntu config
+      become: yes
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        remote_src: yes
+        owner: ubuntu
+
+    - name: copy config to local store
+      become: yes
+      fetch:
+        src: /home/ubuntu/.kube/config
+        dest: .kube/config
+        flat: yes
+
+    - name: ipify
+      ipify_facts:
+    - debug: var=hostvars[inventory_hostname]['ipify_public_ip']

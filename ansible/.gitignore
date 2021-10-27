@@ -1,3 +1,6 @@
+.*
+inventory
+
 # Ansible Tower ignore list
 
 # Ansible runtime and backups
