@@ -20,7 +20,7 @@ variable "image_id" {
 
 }
 
-variable "user" {
+variable "ssh_user" {
   default = "ubuntu"
 
 }
