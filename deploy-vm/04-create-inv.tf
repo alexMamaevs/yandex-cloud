@@ -10,5 +10,5 @@ data "template_file" "k8s" {
 
 resource "local_file" "k8s_file" {
   content  = data.template_file.k8s.rendered
-  filename = "${path.module}/ansible/inventory"
+  filename = "${path.module}inventory"
 }
