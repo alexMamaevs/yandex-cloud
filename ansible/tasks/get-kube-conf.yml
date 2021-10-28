@@ -1,0 +1,10 @@
+- hosts: k8s-master
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: copy config to local store
+      become: yes
+      fetch:
+        src: /home/ubuntu/.kube/config
+        dest: .kube/config
+        flat: yes

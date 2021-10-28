@@ -4,7 +4,7 @@
   
   tasks:
     - name: create the user
-      include: users.yml
+      include: tasks/users.yml
       
 
 - hosts: "all"
@@ -17,19 +17,19 @@
   
   tasks:
      - name: install and configure dependencies
-       include: install-k8s.yml
+       include: tasks/install-k8s.yml
 
 - hosts: k8s-master
   become: yes
   
   tasks:
     - name: initialize the cluster
-      include: master.yml 
+      include: tasks/master.yml 
 
 - hosts: all
   become: yes
   
   tasks:
     - name: join workers
-      include: workers.yml
+      include: tasks/workers.yml
 
