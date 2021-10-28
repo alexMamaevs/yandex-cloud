@@ -31,5 +31,5 @@
   
   tasks:
     - name: join workers
-      include: worcers.yml
+      include: workers.yml
 
