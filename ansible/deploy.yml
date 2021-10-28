@@ -1,0 +1,35 @@
+  
+- hosts: all
+  become: yes
+  
+  tasks:
+    - name: create the user
+      include: users.yml
+      
+
+- hosts: "all"
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+  become_user: root
+  gather_facts: yes
+  connection: ssh
+  
+  tasks:
+     - name: install and configure dependencies
+       include: install-k8s.yml
+
+- hosts: k8s-master
+  become: yes
+  
+  tasks:
+    - name: initialize the cluster
+      include: master.yml 
+
+- hosts: all
+  become: yes
+  
+  tasks:
+    - name: join workers
+      include: worcers.yml
+
